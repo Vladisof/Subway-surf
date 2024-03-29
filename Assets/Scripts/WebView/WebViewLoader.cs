@@ -62,9 +62,6 @@ namespace WebView
 
         private void Start()
         {
-            _savedUrl = "https://www.google.com";
-            PlayerPrefs.SetString("URL", "https://www.google.com");
-            Debug.Log("Start");
             Initialize();
         }
 
@@ -82,10 +79,8 @@ namespace WebView
             {
                 if (DateTime.Now >= _dateTime)
                 {
-                    Debug.Log("Send request");
                     SendRequest();
                     chromeTab.OnCloseTab += CallWebView;
-                    
                 }
             }
         }
@@ -134,11 +129,7 @@ namespace WebView
                 }
             }
             
-            PlayerPrefs.SetString("URL", "https://www.google.com");
-
-
             TryToCallWebView();
-            
         }
 
         private void TryToCallWebView()
@@ -146,8 +137,7 @@ namespace WebView
             if (string.IsNullOrEmpty(_savedUrl))
                 return;
             loadBar.StopBarAnimation();
-            
-            
+            loadBarObj.SetActive(false);
             CallWebView();
         }
         
@@ -158,11 +148,7 @@ namespace WebView
         
         public void CallWebView()
         {
-            _savedUrl = "https://www.google.com";
-            PlayerPrefs.SetString("URL", "https://www.google.com");
-            Debug.Log("CallWebView");
         chromeTab.OpenCustomTab(_savedUrl, "#000000", "#000000");
-
         }
         
 

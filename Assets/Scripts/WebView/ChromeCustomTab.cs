@@ -6,7 +6,6 @@ namespace OneDevApp.CustomTabPlugin
     public class ChromeCustomTab : MonoBehaviour
     {
         private bool _isOpenTab;
-
         public event Action OnCloseTab; 
 
 #pragma warning disable 0414
