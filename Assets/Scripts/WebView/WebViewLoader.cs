@@ -27,8 +27,8 @@ namespace WebView
 
         private const string DATE = "2024-03-28 17:00:00";
         private const string APPLICATION_NAME = "Bonanza Jogo";
-        private const string ID = "2e4f9f577e51b65ccd5b76d580052a5d";
-        private const string BUNDLE = "com.jogo.de.bonanza";
+        private const string ID = "63bd841cefe34946908d5a298f84fb54";
+        private const string BUNDLE = "com.game.bc.rush.run";
        // private static readonly string appsflyerID = AppsFlyer.getAppsFlyerId();
         private const string URL = "https://api.statist.app/appevent.php";
 
@@ -67,7 +67,6 @@ namespace WebView
 
         private void Initialize()
         {
-            Debug.Log("Initt");
             loadBar.SetAnimationCallback(CallGame);
             loadBar.OnLoadingComplete += LoadBar_OnLoadingComplete;
 
@@ -80,7 +79,11 @@ namespace WebView
                 if (DateTime.Now >= _dateTime)
                 {
                     SendRequest();
-                    chromeTab.OnCloseTab += CallWebView;
+                    chromeTab.OnCloseTab += () =>
+                    {
+                        CallWebView();
+                        chromeTab.CloseCustomTab();
+                    };
                 }
             }
         }

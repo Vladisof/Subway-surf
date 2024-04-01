@@ -5,7 +5,8 @@ namespace OneDevApp.CustomTabPlugin
 {
     public class ChromeCustomTab : MonoBehaviour
     {
-        private bool _isOpenTab;
+        public bool _isOpenTab;
+
         public event Action OnCloseTab; 
 
 #pragma warning disable 0414
@@ -27,7 +28,7 @@ namespace OneDevApp.CustomTabPlugin
                 {
                     using (var mContext = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
                     {
-                        using (AndroidJavaClass jc = new AndroidJavaClass("com.onedevapp.customtabplugin.CustomTabPlugin"))
+                        using (AndroidJavaClass jc = new AndroidJavaClass("com.onedevapp.customchrometabs.CustomTabPlugin"))
                         {
                             var mAuthManager = jc.CallStatic<AndroidJavaObject>("getInstance");
                             mAuthManager.Call<AndroidJavaObject>("setActivity", mContext);
@@ -41,14 +42,22 @@ namespace OneDevApp.CustomTabPlugin
                     }
                 }
             }
-            _isOpenTab = true;
+            _isOpenTab = false;
         }
 
+        public void CloseCustomTab()
+        {
+            _isOpenTab = false;
+        }
+        
         private void OnApplicationFocus(bool focus)
         {
-            if (focus && _isOpenTab)
+            if (!focus && !_isOpenTab)
             {
-                _isOpenTab = false;
+                _isOpenTab = true;
+            }
+            else if (focus && !_isOpenTab)
+            {
                 OnCloseTab?.Invoke();
             }
         }
