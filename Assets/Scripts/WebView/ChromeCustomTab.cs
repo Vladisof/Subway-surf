@@ -5,7 +5,7 @@ namespace OneDevApp.CustomTabPlugin
 {
     public class ChromeCustomTab : MonoBehaviour
     {
-        public bool _isOpenTab;
+        private bool _isOpenTab;
 
         public event Action OnCloseTab; 
 
@@ -42,22 +42,14 @@ namespace OneDevApp.CustomTabPlugin
                     }
                 }
             }
-            _isOpenTab = false;
+            _isOpenTab = true;
         }
 
-        public void CloseCustomTab()
-        {
-            _isOpenTab = false;
-        }
-        
         private void OnApplicationFocus(bool focus)
         {
-            if (!focus && !_isOpenTab)
+            if (focus && _isOpenTab)
             {
-                _isOpenTab = true;
-            }
-            else if (focus && !_isOpenTab)
-            {
+                _isOpenTab = false;
                 OnCloseTab?.Invoke();
             }
         }

