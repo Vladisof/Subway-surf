@@ -2520,9 +2520,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7537409140842054499}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 055b338fe848f2148afc70e30a8031a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 68364e9c77f73b54e8a40cbd31f92f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isOpenTab: 0
   m_unityMainActivity: com.unity3d.player.UnityPlayer
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
