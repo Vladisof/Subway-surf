@@ -13,6 +13,7 @@ namespace WebView
         private float _currentTime;
 
         private event Action OnEnd;
+        public event Action OnLoadingComplete;
 
         public void SetAnimationCallback(Action action) =>
             OnEnd = action;
@@ -32,6 +33,7 @@ namespace WebView
                 fillImg.fillAmount = progress;
                 yield return null;
             }
+            OnLoadingComplete?.Invoke();
         }
     }
 }

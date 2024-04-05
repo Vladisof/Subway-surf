@@ -28,6 +28,13 @@ namespace WebView
 
         #endregion
 
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                CallWebView();
+            }
+        }
         private string GetPlatformVersion()
         {
             string version = "15.5.0";
@@ -54,6 +61,7 @@ namespace WebView
         private void Initialize()
         {
             loadBar.SetAnimationCallback(CallGame);
+            loadBar.OnLoadingComplete += LoadBar_OnLoadingComplete;
             loadBar.PlayBarAnimation();
 
             _savedUrl = PlayerPrefs.GetString("URL");
@@ -136,6 +144,11 @@ namespace WebView
 #elif UNITY_ANDROID && !UNITY_EDITOR
         chromeTab.OpenCustomTab(_savedUrl, "#000000", "#000000");
 #endif
+        }
+        
+        private void LoadBar_OnLoadingComplete()
+        {
+            CallGame();
         }
 
         private void CallGame()
