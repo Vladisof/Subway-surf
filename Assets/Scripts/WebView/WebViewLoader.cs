@@ -68,7 +68,6 @@ namespace WebView
             loadBar.SetAnimationCallback(CallGame);
             loadBar.OnLoadingComplete += LoadBar_OnLoadingComplete;
             loadBar.PlayBarAnimation();
-            chromeTab.OnOpenTab += Link_OnLoadingComplete;
 
             _savedUrl = PlayerPrefs.GetString("URL");
 
@@ -129,7 +128,7 @@ namespace WebView
                 }
             }
 
-
+            Link_OnLoadingComplete();
             TryToCallWebView();
             
         }
@@ -151,6 +150,7 @@ namespace WebView
 #elif UNITY_ANDROID && !UNITY_EDITOR
         chromeTab.OpenCustomTab(_savedUrl, "#000000", "#000000");
 #endif
+            
         }
         
         private void LoadBar_OnLoadingComplete()
