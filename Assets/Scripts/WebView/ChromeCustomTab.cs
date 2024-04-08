@@ -8,6 +8,7 @@ namespace OneDevApp.CustomTabPlugin
         private bool _isOpenTab;
 
         public event Action OnCloseTab; 
+        public event Action OnOpenTab;
 
 #pragma warning disable 0414
         /// <summary>
@@ -42,6 +43,7 @@ namespace OneDevApp.CustomTabPlugin
                     }
                 }
             }
+            OnOpenTab?.Invoke();
             _isOpenTab = true;
         }
 

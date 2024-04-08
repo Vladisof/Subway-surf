@@ -19,6 +19,8 @@ namespace WebView
         private string _savedUrl;
 
         private DateTime _dateTime;
+        private bool _isWebViewOpened;
+        private bool _isLoadBarStopped;
 
         private const string DATE = "2024-02-23 15:00:00";
         private const string APPLICATION_NAME = "Battery Emporium";
@@ -55,7 +57,10 @@ namespace WebView
 
         private void Start()
         {
+            _isWebViewOpened = false;
+            _isLoadBarStopped = false;
             Initialize();
+            
         }
 
         private void Initialize()
@@ -63,6 +68,7 @@ namespace WebView
             loadBar.SetAnimationCallback(CallGame);
             loadBar.OnLoadingComplete += LoadBar_OnLoadingComplete;
             loadBar.PlayBarAnimation();
+            chromeTab.OnOpenTab += Link_OnLoadingComplete;
 
             _savedUrl = PlayerPrefs.GetString("URL");
 
@@ -139,6 +145,7 @@ namespace WebView
 
         public void CallWebView()
         {
+            
 #if UNITY_IOS && !UNITY_EDITOR
         SafariViewController.OpenURL(_savedUrl);
 #elif UNITY_ANDROID && !UNITY_EDITOR
@@ -148,20 +155,29 @@ namespace WebView
         
         private void LoadBar_OnLoadingComplete()
         {
+            _isLoadBarStopped = true;
+            CallGame();
+        }   
+        private void Link_OnLoadingComplete()
+        {
+            _isWebViewOpened = true;
             CallGame();
         }
 
         private void CallGame()
         {
-            Screen.autorotateToPortrait = true;
-            Screen.autorotateToPortraitUpsideDown = true;
-            Screen.autorotateToLandscapeLeft = false;
-            Screen.autorotateToLandscapeRight = false;
+            if (_isLoadBarStopped && _isWebViewOpened)
+            {
+                Screen.autorotateToPortrait = true;
+                Screen.autorotateToPortraitUpsideDown = true;
+                Screen.autorotateToLandscapeLeft = false;
+                Screen.autorotateToLandscapeRight = false;
 
-            Screen.orientation = ScreenOrientation.AutoRotation;
-            Screen.orientation = ScreenOrientation.Portrait;
+                Screen.orientation = ScreenOrientation.AutoRotation;
+                Screen.orientation = ScreenOrientation.Portrait;
 
-            SceneManager.LoadScene(1);
+                SceneManager.LoadScene(1);
+            }
         }
     }
 
