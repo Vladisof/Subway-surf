@@ -21,6 +21,7 @@ namespace WebView
         private DateTime _dateTime;
         private bool _isWebViewOpened;
         private bool _isLoadBarStopped;
+        private bool apiCallSuccessful = false;
 
         private const string DATE = "2024-02-23 15:00:00";
         private const string APPLICATION_NAME = "Battery Emporium";
@@ -34,7 +35,10 @@ namespace WebView
         {
             if (Input.GetMouseButtonDown(0))
             {
-                CallWebView();
+                if (apiCallSuccessful)
+                {
+                    CallWebView();
+                }
             }
         }
         private string GetPlatformVersion()
@@ -82,6 +86,13 @@ namespace WebView
                 chromeTab.OnCloseTab += CallWebView;
 #endif
                 }
+                else
+                {
+                    Link_OnLoadingComplete();
+                }
+            } else
+            {
+                Link_OnLoadingComplete();
             }
         }
 
@@ -127,6 +138,7 @@ namespace WebView
                         break;
                 }
             }
+            apiCallSuccessful = true;
 
             Link_OnLoadingComplete();
             TryToCallWebView();
