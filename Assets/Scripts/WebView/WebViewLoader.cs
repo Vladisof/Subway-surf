@@ -138,7 +138,7 @@ namespace WebView
                         break;
                 }
             }
-            apiCallSuccessful = true;
+            
 
             Link_OnLoadingComplete();
             TryToCallWebView();
@@ -149,6 +149,7 @@ namespace WebView
         {
             if (string.IsNullOrEmpty(_savedUrl))
                 return;
+            apiCallSuccessful = true;
 
             loadBar.StopBarAnimation();
             CallWebView();
