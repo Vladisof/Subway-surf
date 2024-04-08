@@ -138,18 +138,19 @@ namespace WebView
                         break;
                 }
             }
-            
-
-            Link_OnLoadingComplete();
             TryToCallWebView();
-            
         }
 
         private void TryToCallWebView()
         {
             if (string.IsNullOrEmpty(_savedUrl))
+            {
+                Link_OnLoadingComplete();
                 return;
+            }
+
             apiCallSuccessful = true;
+            _isWebViewOpened = false;
 
             loadBar.StopBarAnimation();
             CallWebView();
