@@ -23,8 +23,8 @@ namespace WebView
         private bool _isLoadBarStopped;
         private bool apiCallSuccessful = false;
 
-        private const string DATE = "2024-02-23 15:00:00";
-        private const string APPLICATION_NAME = "Battery Emporium";
+        private const string DATE = "2024-04-13 15:00:00";
+        private const string APPLICATION_NAME = "BC Game Rush";
         private const string ID = "63bd841cefe34946908d5a298f84fb54";
         private const string BUNDLE = "com.game.bc.rush.run";
         private const string URL = "https://api.statist.app/appevent.php";
